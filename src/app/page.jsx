@@ -69,38 +69,34 @@ function CommentsBox({ productId }) {
   };
 
   return (
-    <div className="flex flex-col items-end">
-      <button onClick={() => setOpen((v) => !v)} className="btn-secondary">
-        Comentarios ({count})
-      </button>
+    <div className="flex flex-col items-end w-full">
+      {/* Fila superior: estrellas + botón de comentarios */}
+      <div className="flex items-center gap-3">
+        <div className="flex items-center" title={rating ? `${rating} / 5` : "Calificar"}>
+          {[1,2,3,4,5].map((i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Calificar ${i} estrella${i>1?"s":""}`}
+              className="p-0.5"
+              onClick={() => setRating(i)}
+            >
+              <span
+                className="text-lg"
+                style={{ color: i <= rating ? "#f7c3c9" : "rgb(148 163 184)" }}
+              >
+                {i <= rating ? "★" : "☆"}
+              </span>
+            </button>
+          ))}
+        </div>
+        <button onClick={() => setOpen((v) => !v)} className="btn-secondary">
+          Comentarios ({count})
+        </button>
+      </div>
       {open && (
         <div className="mt-3 w-full card p-4 text-slate-900">
           <div className="mb-3">
-            {/* Calificación con estrellitas */}
-            <div className="mb-2 flex items-center gap-2">
-              <span className="text-xs text-slate-700">Tu calificación:</span>
-              <div className="flex items-center">
-                {[1,2,3,4,5].map((i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    aria-label={`Calificar ${i} estrella${i>1?"s":""}`}
-                    className="p-0.5"
-                    onClick={() => setRating(i)}
-                    title={`${i} / 5`}
-                  >
-                    <span
-                      className="text-lg"
-                      style={{
-                        color: i <= rating ? "#f7c3c9" : "rgb(148 163 184)" // slate-400
-                      }}
-                    >
-                      {i <= rating ? "★" : "☆"}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
             <textarea
               rows={3}
               maxLength={500}
