@@ -6,11 +6,16 @@
     "dev": "next dev",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "prisma generate",
+    "render-build": "prisma generate && next build --turbopack",
+    "render-start": "prisma migrate deploy && next start",
+    "promote:admin": "node src/scripts/promoteAdmin.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
+    "@prisma/client": "^6.18.0",
     "next": "15.5.2",
     "next-auth": "^4.24.11",
     "react": "19.1.0",
@@ -19,7 +24,6 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@prisma/client": "^6.18.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "24.5.2",
     "@types/react": "19.1.13",
@@ -27,5 +31,8 @@
     "eslint-config-next": "15.5.2",
     "prisma": "^6.18.0",
     "tailwindcss": "^4"
+  },
+  "engines": {
+    "node": ">=18.18 <23"
   }
 }
