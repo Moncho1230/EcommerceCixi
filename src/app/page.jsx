@@ -12,6 +12,7 @@ function CommentsBox({ productId }) {
   const [count, setCount] = useState(0);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [rating, setRating] = useState(0);
 
   async function loadComments() {
     const res = await fetch(`/api/products/${productId}/comments`, { cache: "no-store" });
@@ -29,6 +30,20 @@ function CommentsBox({ productId }) {
     if (!txt) return;
     setLoading(true);
     try {
+      // Si seleccionó estrellas, guardamos la calificación primero (opcional)
+      if (rating > 0) {
+        try {
+          await fetch(`/api/ratings/create`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId, value: rating })
+          });
+        } catch (e) {
+          // si falla la calificación, continuamos con el comentario
+          console.error("Rating failed", e);
+        }
+      }
+
       const res = await fetch(`/api/products/${productId}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -47,6 +62,7 @@ function CommentsBox({ productId }) {
       ]);
       setCount((c) => c + 1);
       setContent("");
+      setRating(0);
     } finally {
       setLoading(false);
     }
@@ -60,6 +76,31 @@ function CommentsBox({ productId }) {
       {open && (
         <div className="mt-3 w-full card p-4 text-slate-900">
           <div className="mb-3">
+            {/* Calificación con estrellitas */}
+            <div className="mb-2 flex items-center gap-2">
+              <span className="text-xs text-slate-700">Tu calificación:</span>
+              <div className="flex items-center">
+                {[1,2,3,4,5].map((i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    aria-label={`Calificar ${i} estrella${i>1?"s":""}`}
+                    className="p-0.5"
+                    onClick={() => setRating(i)}
+                    title={`${i} / 5`}
+                  >
+                    <span
+                      className="text-lg"
+                      style={{
+                        color: i <= rating ? "#f7c3c9" : "rgb(148 163 184)" // slate-400
+                      }}
+                    >
+                      {i <= rating ? "★" : "☆"}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
             <textarea
               rows={3}
               maxLength={500}
