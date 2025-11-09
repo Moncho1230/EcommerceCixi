@@ -4,6 +4,7 @@ import "./globals.css";
 import ClientWrapper from "../components/ClientWrapper";
 import Navbar from "../components/Navbar";
 import FloatingCreateKit from "../components/FloatingCreateKit";
+import FloatingOrders from "../components/FloatingOrders";
 
 
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
         <ClientWrapper>
           <Navbar />
           <FloatingCreateKit />
+          <FloatingOrders />
           {children}
         </ClientWrapper>
       </body>

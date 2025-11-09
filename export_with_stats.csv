@@ -1,0 +1,12 @@
+"Statistic","Value"
+"Total units sold","7"
+"Total revenue (MXN)","205000.00"
+"Distinct products sold","3"
+"Total orders","3"
+"Average revenue per order (MXN)","68333.33"
+"Average revenue per product (MXN)","68333.33"
+
+productId,name,totalQuantity,totalRevenue,orderCount,avgUnitPrice
+2,"Acondicionador Savital",3,69000.00,2,23000.00
+4,"Shampoo queratina",2,100000.00,1,50000.00
+3,"Peinilla Classic",2,36000.00,2,18000.00

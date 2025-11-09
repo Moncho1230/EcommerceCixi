@@ -24,16 +24,8 @@ function LoginPage() {
     if (res.error) {
       setError(res.error);
     } else {
-      // Esperamos un momento para que la sesión se actualice
-      setTimeout(() => {
-        const userRole = session?.user?.role;
-
-        if (userRole === "admin") {
-          router.push("/products/pricing");
-        } else {
-          router.push("/");
-        }
-      }, 500); // Esperamos 500ms para que la sesión se propague
+      // Redirigimos al home inmediatamente; la sesión se resolverá en el cliente.
+      router.push("/");
     }
   });
 

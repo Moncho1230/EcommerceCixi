@@ -47,7 +47,15 @@ export default function UserMenu() {
       {open && (
         <div className="absolute right-0 mt-2 w-56 rounded-md border border-slate-200 bg-white shadow-lg z-50 p-3 text-slate-700">
           <div className="text-xs mb-2 opacity-80">Signed in as</div>
-          <div className="text-sm font-semibold truncate mb-3 text-slate-900">{name}</div>
+          <div className="text-sm font-semibold truncate mb-2 text-slate-900">{name}</div>
+
+          {/* Enlace a mis pedidos para usuarios (no admin) */}
+          {session?.user?.role !== "admin" && (
+            <a href="/orders" className="block w-full text-left text-xs mb-3 hover:underline text-slate-700">
+              Mis pedidos
+            </a>
+          )}
+
           <button
             onClick={() => signOut({ callbackUrl: "/" })}
             className="w-full btn-primary"

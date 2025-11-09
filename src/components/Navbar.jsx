@@ -29,6 +29,7 @@ export default function Navbar() {
         {isAdmin && (
           <>
             <a href="/products/pricing" className="text-slate-700 hover:text-[#f7c3c9] font-medium">Productos</a>
+            <a href="/admin/orders" className="text-slate-700 hover:text-[#f7c3c9] font-medium">Pedidos</a>
             <a href="/kits" className="text-slate-700 hover:text-[#f7c3c9] font-medium">Crear kit</a>
             <a href="/categories" className="text-slate-700 hover:text-[#f7c3c9] font-medium">Categorías</a>
           </>

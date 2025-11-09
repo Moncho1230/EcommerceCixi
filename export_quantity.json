@@ -1,0 +1,23 @@
+{
+  "rows": [
+    {
+      "productId": 2,
+      "name": "Acondicionador Savital",
+      "totalQuantity": 3,
+      "totalRevenue": 69000
+    },
+    {
+      "productId": 4,
+      "name": "Shampoo queratina",
+      "totalQuantity": 2,
+      "totalRevenue": 100000
+    },
+    {
+      "productId": 3,
+      "name": "Peinilla Classic",
+      "totalQuantity": 2,
+      "totalRevenue": 36000
+    }
+  ],
+  "sortBy": "quantity"
+}

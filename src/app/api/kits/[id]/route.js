@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-export async function GET(_req, { params }) {
+export async function GET(_req, context) {
+  const { params } = await context;
   const id = Number(params.id);
   const kit = await prisma.kit.findUnique({
     where: { id },
@@ -14,7 +15,8 @@ export async function GET(_req, { params }) {
   return NextResponse.json(kit);
 }
 
-export async function PATCH(req, { params }) {
+export async function PATCH(req, context) {
+  const { params } = await context;
   const id = Number(params.id);
   const body = await req.json().catch(() => ({}));
   const name = String(body?.name || "").trim();
@@ -55,7 +57,8 @@ export async function PATCH(req, { params }) {
   return NextResponse.json(updated);
 }
 
-export async function DELETE(_req, { params }) {
+export async function DELETE(_req, context) {
+  const { params } = await context;
   const id = Number(params.id);
   // borro items y luego el kit
   await prisma.kitItem.deleteMany({ where: { kitId: id } });

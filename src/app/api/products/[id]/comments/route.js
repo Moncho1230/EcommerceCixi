@@ -9,7 +9,8 @@ function parseId(idRaw) {
   return Number.isNaN(n) ? idRaw : n; 
 }
 
-export async function GET(_req, { params }) {
+export async function GET(_req, context) {
+  const { params } = await context;
   const id = parseId(params.id);
   try {
     const comments = await prisma.comment.findMany({
@@ -24,7 +25,8 @@ export async function GET(_req, { params }) {
   }
 }
 
-export async function POST(req, { params }) {
+export async function POST(req, context) {
+  const { params } = await context;
   const id = parseId(params.id);
   try {
     const body = await req.json();
@@ -37,9 +39,19 @@ export async function POST(req, { params }) {
     if (!product) {
       return NextResponse.json({ error: "Producto no encontrado" }, { status: 404 });
     }
+    // try to capture user name from session when available
+    let userName = "Usuario";
+    try {
+      const session = await getServerSession(authOptions);
+      if (session?.user) {
+        userName = session.user.name || session.user.email || userName;
+      }
+    } catch (e) {
+      // ignore
+    }
 
     const created = await prisma.comment.create({
-      data: { productId: id, userName: "Usuario", content },
+      data: { productId: id, userName, content },
     });
     return NextResponse.json(created, { status: 201 });
   } catch (e) {
@@ -47,7 +59,8 @@ export async function POST(req, { params }) {
   }
 }
 
-export async function DELETE(req, { params }) {
+export async function DELETE(req, context) {
+  const { params } = await context;
   const productId = parseId(params.id);
   try {
     const session = await getServerSession(authOptions);

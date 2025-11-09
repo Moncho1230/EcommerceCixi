@@ -11,11 +11,13 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   username  String   @unique
+  phone     String?
   password  String
   role      String   @default("customer")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ratings   Rating[]
+  orders    Order[]
 }
 
 model Category {
@@ -39,6 +41,7 @@ model Product {
   image       String?
   Comment     Comment[]
   KitItem     KitItem[]
+  orderItems  OrderItem[]
 }
 
 model Rating {
@@ -84,4 +87,33 @@ model KitItem {
   product Product @relation(fields: [productId], references: [id])
 
   @@unique([kitId, productId]) // evita duplicados del mismo producto dentro del kit
+}
+
+/// Pedidos
+model Order {
+  id        Int       @id @default(autoincrement())
+  userId    Int?
+  user      User?     @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  status    String    @default("Pendiente")
+  items     OrderItem[]
+  total     Float?
+
+  @@index([userId, createdAt])
+}
+
+model OrderItem {
+  id         Int      @id @default(autoincrement())
+  orderId    Int
+  type       String?  // product | kit | customKit
+  productId  Int?
+  name       String
+  unitPrice  Float    @default(0)
+  quantity   Int      @default(1)
+  detail     Json?
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product? @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
 }

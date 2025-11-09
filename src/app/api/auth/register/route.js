@@ -50,6 +50,7 @@ export async function POST(request) {
       data: {
         username: data.username,
         email: data.email,
+        phone: data.phone || null,
         password: hashedPassword,
         role
       }

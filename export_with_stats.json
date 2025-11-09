@@ -1,0 +1,70 @@
+{
+  "stats": {
+    "totalUnitsSold": 7,
+    "totalRevenue": 205000,
+    "distinctProductsSold": 3,
+    "totalOrders": 3,
+    "avgRevenuePerOrder": 68333.33333333333,
+    "avgRevenuePerProduct": 68333.33333333333,
+    "topByQuantity": [
+      {
+        "productId": 2,
+        "name": "Acondicionador Savital",
+        "totalQuantity": 3
+      },
+      {
+        "productId": 4,
+        "name": "Shampoo queratina",
+        "totalQuantity": 2
+      },
+      {
+        "productId": 3,
+        "name": "Peinilla Classic",
+        "totalQuantity": 2
+      }
+    ],
+    "topByRevenue": [
+      {
+        "productId": 4,
+        "name": "Shampoo queratina",
+        "totalRevenue": 100000
+      },
+      {
+        "productId": 2,
+        "name": "Acondicionador Savital",
+        "totalRevenue": 69000
+      },
+      {
+        "productId": 3,
+        "name": "Peinilla Classic",
+        "totalRevenue": 36000
+      }
+    ]
+  },
+  "rows": [
+    {
+      "productId": 2,
+      "name": "Acondicionador Savital",
+      "totalQuantity": 3,
+      "totalRevenue": 69000,
+      "orderCount": 2,
+      "avgUnitPrice": 23000
+    },
+    {
+      "productId": 4,
+      "name": "Shampoo queratina",
+      "totalQuantity": 2,
+      "totalRevenue": 100000,
+      "orderCount": 1,
+      "avgUnitPrice": 50000
+    },
+    {
+      "productId": 3,
+      "name": "Peinilla Classic",
+      "totalQuantity": 2,
+      "totalRevenue": 36000,
+      "orderCount": 2,
+      "avgUnitPrice": 18000
+    }
+  ]
+}

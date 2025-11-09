@@ -19,6 +19,7 @@ function RegisterPage() {
       body: JSON.stringify({
         username: data.username,
         email: data.email,
+        phone: data.phone,
         password: data.password
       }),
       headers: { 'Content-Type': 'application/json' }
@@ -29,7 +30,9 @@ function RegisterPage() {
       router.push('/auth/login');
     } else {
       const errorData = await res.json().catch(() => ({}));
-      toast.error(errorData?.error || "El usuario ya existe");
+      // show more details in dev so user can see the real server message
+      const message = errorData?.details || errorData?.message || errorData?.error || "El usuario ya existe";
+      toast.error(String(message));
     }
   });
 
@@ -70,6 +73,15 @@ function RegisterPage() {
           placeholder="email@gmail.com"
         />
   {errors.email && <span className="text-slate-700 text-xs">{errors.email.message}</span>}
+
+        <label className="text-slate-600 mb-1 block text-xs">Celular</label>
+        <input
+          type="tel"
+          {...register("phone")}
+          className="input-base w-full mb-2"
+          placeholder="+57 300 0000000"
+        />
+  {errors.phone && <span className="text-slate-700 text-xs">{errors.phone.message}</span>}
 
         <label className="text-slate-600 mb-1 block text-xs">Contraseña</label>
         <input

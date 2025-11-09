@@ -1,12 +1,18 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { getCart, setQty, removeFromCart } from "../../libs/cart"; 
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { getCart, setQty, removeFromCart, clearCart } from "../../libs/cart"; 
+import { useToast } from "../../components/ToastProvider";
 
 export default function CartPage() {
   const [items, setItems] = useState([]);
   const [productsMap, setProductsMap] = useState({}); 
   const fmt = useMemo(() => new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }), []);
+  const { data: session } = useSession();
+  const router = useRouter();
+  const toast = useToast();
 
   useEffect(() => {
     setItems(getCart());
@@ -71,6 +77,53 @@ export default function CartPage() {
   const remove = (it) => {
     const updated = removeFromCart(it.id);
     setItems(updated);
+  };
+
+  const confirmOrder = async () => {
+    if (!session?.user?.id) {
+      toast.info("Inicia sesión para confirmar tu pedido");
+      router.push("/auth/login");
+      return;
+    }
+    if (items.length === 0) {
+      toast.info("Tu carrito está vacío");
+      return;
+    }
+    const payloadItems = items.map((it) => {
+      // Detect item type
+      let type = undefined;
+      if (typeof it.id === "string" && it.id.startsWith("kit-custom-")) type = "customKit";
+      else if (typeof it.id === "string" && it.id.startsWith("kit-")) type = "kit";
+      else type = "product";
+      return {
+        type,
+        productId: type === "product" ? Number(it.id) : null,
+        name: it.name,
+        unitPrice: getLivePrice(it),
+        quantity: it.qty || 1,
+        detail: it.detail || null,
+      };
+    });
+
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: payloadItems }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        toast.error(err?.error || `Error ${res.status}`);
+        return;
+      }
+      const order = await res.json();
+      clearCart();
+      setItems([]);
+      toast.success("Pedido creado con éxito");
+      router.push(`/orders/${order.id}`);
+    } catch {
+      toast.error("No se pudo crear el pedido");
+    }
   };
 
   return (
@@ -150,10 +203,10 @@ export default function CartPage() {
                 })}
               </ul>
 
-              {/* Total */}
-              <div className="card p-3 flex justify-between items-center">
-                <span className="text-slate-900 font-bold">Total</span>
-                <span className="text-slate-900 font-bold">{fmt.format(total)}</span>
+              {/* Total + Confirmar */}
+              <div className="card p-3 flex justify-between items-center gap-3">
+                <div className="text-slate-900 font-bold">Total: {fmt.format(total)}</div>
+                <button onClick={confirmOrder} className="btn-primary">Confirmar pedido</button>
               </div>
             </>
           )}
